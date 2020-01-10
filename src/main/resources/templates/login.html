@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+
+<form action="#" th:action="@{/login}" th:object="${account}" method="post">
+    <table>
+        <tr>
+            <td>
+                用户名:
+            </td>
+            <td>
+                <input type="text" th:field="*{name}"/>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                密码:
+            </td>
+            <td>
+                <input type="password" th:field="*{password}"/>
+                <input type="checkbox" name="rememberMe" />记住我<br/>
+            </td>
+
+        </tr>
+
+    </table>
+    <div>
+        <p th:text="${msg}" style="color: red"/>
+    </div>
+
+    <p><input type="submit" value="Submit"/> <input type="reset" value="Reset"/>
+    </p>
+</form>
+
+<div shiro:user>
+<form id="logoutForm" th:action="@{/logout}" method="post">
+    <input type="submit" value="注销"/>
+</form>
+</div>
+
+</body>
+</html>

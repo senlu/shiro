@@ -1,0 +1,18 @@
+shiro:
+  # 用户未登录时跳转的请求路径
+  loginUrl: /login
+  # 用户没有访问权限时跳转的请求路径
+  unauthorizedUrl: /error
+  successUrl: /login
+  sessionManager:
+    sessionIdUrlRewritingEnabled: false
+    cookie:
+      name: BIUSID
+      maxAge: 60
+  rememberMeManager:
+    cookie:
+      name: rememberMe
+      maxAge: 2592000
+      httpOnly: true
+    cipherKey: Base64.decode("6ZmI6I2j5Y+R5aSn5ZOlAA==")
+

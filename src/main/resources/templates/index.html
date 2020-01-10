@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:shiro="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎</title>
+</head>
+<body>
+
+<div shiro:principal property="name">
+</div>
+<span th:text="登录成功！"></span>
+
+<div shiro:user>
+    <form id="logoutForm" th:action="@{/logout}" method="post">
+        <input type="submit" value="注销"/>
+    </form>
+</div>
+
+<div shiro:guest>
+    游客
+</div>
+<div shiro:user>
+    记住我
+</div>
+<div shiro:authenticated>
+    已登录
+</div>
+<div shiro:notAuthenticated >
+    未登录
+</div>
+
+<div shiro:hasRole="admin"  >
+    admin
+</div>
+
+
+<div shiro:principal property="name">
+</div>
+
+<div shiro:hasPermission="test">
+    有test权限
+</div>
+<div shiro:lacksPermission="test">
+    没有test权限
+</div>
+
+</body>
+</html>
