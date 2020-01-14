@@ -2,6 +2,7 @@ package com.lusen.shiro.service.impl;
 
 import com.lusen.shiro.domain.Account;
 import com.lusen.shiro.service.AccountService;
+import org.apache.shiro.codec.Base64;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -26,11 +27,12 @@ public class AccountServiceImpl implements AccountService
     {
         Account account = new Account();
         account.setName("lusen");
-        account.setPassword("096cd7645ceaa6495d336656ea2c4fc1");
+        account.setPassword("7d34be07f598c9dd5083f3b4877a56aa7b365a849aee63dd96522008ba26559c71ca3ce818c37444299fa0e7358fdbb9ed9cad2472293e5b2a0bc1c87376a178");
         Set<String> roles = new HashSet<>();
         roles.add("admin");
         Set<String> permissions = new HashSet<>();
         permissions.add("login");
+        permissions.add("clear");
         permissions.add("test");
         account.setPermissions(permissions);
         account.setRoles(roles);
@@ -42,4 +44,5 @@ public class AccountServiceImpl implements AccountService
     {
         return accountMap.get(name);
     }
+
 }

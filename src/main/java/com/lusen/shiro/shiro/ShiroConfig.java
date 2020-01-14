@@ -2,19 +2,15 @@ package com.lusen.shiro.shiro;
 
 import at.pollux.thymeleaf.shiro.dialect.ShiroDialect;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.codec.Base64;
-import org.apache.shiro.crypto.hash.Sha256Hash;
-import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.config.DefaultShiroFilterChainDefinition;
 import org.apache.shiro.spring.web.config.ShiroFilterChainDefinition;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,8 +32,8 @@ public class ShiroConfig
     {
         HashedCredentialsMatcher hashedCredentialsMatcher =
             new HashedCredentialsMatcher();
-        //散列算法:这里使用MD5算法;
-        hashedCredentialsMatcher.setHashAlgorithmName("md5");
+        //散列算法:这里使用SHA-512算法;（实际使用的要考虑效率、存储加密后大小问题，一般采用MD5就够了）
+        hashedCredentialsMatcher.setHashAlgorithmName("SHA-512");
         //散列的次数，比如散列两次，相当于 md5(md5(""));
         hashedCredentialsMatcher.setHashIterations(10);
         // true 指Hash散列值使用Hex加密存
@@ -51,6 +47,7 @@ public class ShiroConfig
     {
         MyRealm myRealm = new MyRealm();
         myRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+
         return myRealm;
     }
 
@@ -103,7 +100,7 @@ public class ShiroConfig
     }
 
     /**
-     * 缓存启用
+     * 缓存启用（这里简单使用默认的内存缓存）
      * 启用缓存后，不会每次都去执行一次doGetAuthorizationInfo
      *
      * @return
@@ -114,4 +111,19 @@ public class ShiroConfig
         return new MemoryConstrainedCacheManager();
     }
 
+    /**
+     * 配置记住我功能
+     * @return
+     */
+    @Bean
+    public RememberMeManager rememberMeManager() {
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        // 30天
+        simpleCookie.setMaxAge(24*60*60*30);
+        simpleCookie.setHttpOnly(true);
+        cookieRememberMeManager.setCookie(simpleCookie);
+        cookieRememberMeManager.setCipherKey(Base64.decode("9Ami6v2G5Y+r5aPnE4OlBB=="));
+        return cookieRememberMeManager;
+    }
 }

@@ -6,13 +6,3 @@ shiro:
   successUrl: /login
   sessionManager:
     sessionIdUrlRewritingEnabled: false
-    cookie:
-      name: BIUSID
-      maxAge: 60
-  rememberMeManager:
-    cookie:
-      name: rememberMe
-      maxAge: 2592000
-      httpOnly: true
-    cipherKey: Base64.decode("6ZmI6I2j5Y+R5aSn5ZOlAA==")
-

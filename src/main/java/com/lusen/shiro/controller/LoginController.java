@@ -1,11 +1,13 @@
 package com.lusen.shiro.controller;
 
 import com.lusen.shiro.domain.Account;
+import com.lusen.shiro.shiro.MyRealm;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.mgt.RealmSecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +31,7 @@ public class LoginController
     public String goToLogin(Account account)
     {
         Subject subject = SecurityUtils.getSubject();
+        // 判断用户是否已登录或者选择记住我
         if(subject.isAuthenticated() || subject.isRemembered())
         {
             return "index";
@@ -44,7 +47,6 @@ public class LoginController
 
         //1.获取Subject
         Subject subject = SecurityUtils.getSubject();
-
         //2.封装用户数据
         UsernamePasswordToken token = new UsernamePasswordToken(account.getName(), account.getPassword(),rememberMe);
 
@@ -84,5 +86,18 @@ public class LoginController
     {
         log.error("测试test!");
         return "index";
+    }
+
+    @RequiresPermissions("clear")
+    @RequestMapping("/clear")
+    public String clearCache(Model model)
+    {
+        RealmSecurityManager rsm = (RealmSecurityManager)SecurityUtils.getSecurityManager();
+        MyRealm realm = (MyRealm)rsm.getRealms().iterator().next();
+        realm.clearCachedAuthenticationInfo();
+        realm.clearCachedAuthorizationInfo();
+        log.error("清除成功");
+        model.addAttribute("msg","清除成功");
+        return "error";
     }
 }
